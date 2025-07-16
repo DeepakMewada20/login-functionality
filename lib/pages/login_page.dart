@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 // Login Page
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key}); 
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -10,6 +13,13 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isPasswordHidden = true;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +33,7 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               SizedBox(height: 60),
               // Logo or Title
-              Icon(
-                Icons.lock_outline,
-                size: 80,
-                color: Colors.blue,
-              ),
+              Icon(Icons.lock_outline, size: 80, color: Colors.blue),
               SizedBox(height: 20),
               Text(
                 'Welcome Back',
@@ -41,10 +47,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 8),
               Text(
                 'Sign in to continue',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey[600],
-                ),
+                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 50),
@@ -82,7 +85,9 @@ class _LoginPageState extends State<LoginPage> {
                         prefixIcon: Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _isPasswordHidden ? Icons.visibility_off : Icons.visibility,
+                            _isPasswordHidden
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                           ),
                           onPressed: () {
                             setState(() {
@@ -118,17 +123,29 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(height: 30),
                     // Login Button
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           // Handle login
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Login functionality not implemented')),
-                          );
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   SnackBar(
+                          //     content: Text(
+                          //       'Login functionality not implemented',
+                          //     ),
+                          //   ),
+                          // );
+                          await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                email: _emailController.text,
+                                password: _passwordController.text,
+                              ) ;
                         }
                       },
                       child: Text(
                         'Login',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
