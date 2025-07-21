@@ -1,6 +1,6 @@
+import 'package:authentication/pages/login_page.dart';
 import 'package:authentication/wrapper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -37,9 +37,8 @@ class _SignupPageState extends State<SignupPage> {
             .createUserWithEmailAndPassword(
               email: _emailController.text,
               password: _passwordController.text,
-
             );
-        print(currentUser.user?.email); // Refresh user data
+        //print(currentUser.user?.email); // Refresh user data
         if (currentUser.user != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -48,7 +47,7 @@ class _SignupPageState extends State<SignupPage> {
               ),
             ),
           );
-          Get.offAll(()=> Wrapper()); // Navigate to Wrapper
+          Get.offAll(() => Wrapper()); // Navigate to Wrapper
         }
       } catch (e) {
         ScaffoldMessenger.of(
@@ -237,7 +236,9 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.pop(context);
+                            Get.offAll(
+                              () => LoginPage(),
+                            ); // Navigate to Login Page
                           },
                           child: Text(
                             'Login',

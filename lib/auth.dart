@@ -1,7 +1,7 @@
 import 'package:authentication/pages/forgot_password_page.dart';
 import 'package:authentication/pages/home_page.dart';
 import 'package:authentication/pages/login_page.dart';
-import 'package:authentication/pages/verifecation_page.dart';
+import 'package:authentication/pages/otp_verifecation_page.dart';
 import 'package:authentication/pages/singup_page.dart';
 import 'package:authentication/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginPage(),
         '/signup': (context) => SignupPage(),
         '/forgot-password': (context) => ForgotPasswordPage(),
-        '/otp-verification': (context) => VerificationPage(),
+        '/otp-verification': (context) => OtpVerificationPage(),
         '/home': (context) => HomePage(),
       },
       home: Wrapper(),

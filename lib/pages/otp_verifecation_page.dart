@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // OTP Verification Page
-class VerificationPage extends StatefulWidget {
-  const VerificationPage({super.key});
+class OtpVerificationPage extends StatefulWidget {
+  const OtpVerificationPage({super.key});
 
   @override
-  _VerificationPageState createState() => _VerificationPageState();
+  _OtpVerificationPageState createState() => _OtpVerificationPageState();
 }
 
-class _VerificationPageState extends State<VerificationPage> {
+class _OtpVerificationPageState extends State<OtpVerificationPage> {
   final List<TextEditingController> _controllers = List.generate(
     6,
     (index) => TextEditingController(),
