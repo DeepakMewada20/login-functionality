@@ -1,6 +1,13 @@
+import 'package:authentication/wrapper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 // Sign Up Page
 class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
+
   @override
   _SignupPageState createState() => _SignupPageState();
 }
@@ -14,13 +21,41 @@ class _SignupPageState extends State<SignupPage> {
   bool _isPasswordHidden = true;
   bool _isConfirmPasswordHidden = true;
 
-   @override
+  @override
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
+  }
+
+  Future<void> singup() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        UserCredential currentUser = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+              email: _emailController.text,
+              password: _passwordController.text,
+
+            );
+        print(currentUser.user?.email); // Refresh user data
+        if (currentUser.user != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                '${currentUser.user!.displayName}Sign up successful!',
+              ),
+            ),
+          );
+          Get.offAll(()=> Wrapper()); // Navigate to Wrapper
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Sign up failed: $e')));
+      }
+    }
   }
 
   @override
@@ -43,11 +78,7 @@ class _SignupPageState extends State<SignupPage> {
             children: [
               SizedBox(height: 20),
               // Logo or Title
-              Icon(
-                Icons.person_add_outlined,
-                size: 80,
-                color: Colors.blue,
-              ),
+              Icon(Icons.person_add_outlined, size: 80, color: Colors.blue),
               SizedBox(height: 20),
               Text(
                 'Create Account',
@@ -61,10 +92,7 @@ class _SignupPageState extends State<SignupPage> {
               SizedBox(height: 8),
               Text(
                 'Sign up to get started',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey[600],
-                ),
+                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 40),
@@ -121,7 +149,9 @@ class _SignupPageState extends State<SignupPage> {
                         prefixIcon: Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _isPasswordHidden ? Icons.visibility_off : Icons.visibility,
+                            _isPasswordHidden
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                           ),
                           onPressed: () {
                             setState(() {
@@ -151,11 +181,14 @@ class _SignupPageState extends State<SignupPage> {
                         prefixIcon: Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _isConfirmPasswordHidden ? Icons.visibility_off : Icons.visibility,
+                            _isConfirmPasswordHidden
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                           ),
                           onPressed: () {
                             setState(() {
-                              _isConfirmPasswordHidden = !_isConfirmPasswordHidden;
+                              _isConfirmPasswordHidden =
+                                  !_isConfirmPasswordHidden;
                             });
                           },
                         ),
@@ -176,22 +209,20 @@ class _SignupPageState extends State<SignupPage> {
                     SizedBox(height: 30),
                     // Sign Up Button
                     ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          // Handle sign up
-                          Navigator.pushNamed(context, '/otp-verification');
-                        }
-                      },
-                      child: Text(
-                        'Sign Up',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
+                      onPressed: singup,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
                         foregroundColor: Colors.white,
                         padding: EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        'Sign Up',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),

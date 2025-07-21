@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // OTP Verification Page
-class OTPVerificationPage extends StatefulWidget {
+class VerificationPage extends StatefulWidget {
+  const VerificationPage({super.key});
+
   @override
-  _OTPVerificationPageState createState() => _OTPVerificationPageState();
+  _VerificationPageState createState() => _VerificationPageState();
 }
 
-class _OTPVerificationPageState extends State<OTPVerificationPage> {
+class _VerificationPageState extends State<VerificationPage> {
   final List<TextEditingController> _controllers = List.generate(
     6,
     (index) => TextEditingController(),
@@ -19,7 +21,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        //backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
@@ -106,10 +108,6 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                     );
                   }
                 },
-                child: Text(
-                  'Verify OTP',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,
@@ -117,6 +115,10 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
+                ),
+                child: Text(
+                  'Verify OTP',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
               SizedBox(height: 30),

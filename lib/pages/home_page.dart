@@ -2,6 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  Future<void> singout() async {
+    await FirebaseAuth.instance.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,12 +20,7 @@ class HomePage extends StatelessWidget {
               style: TextStyle(fontSize: 20),
             ),
             Text("Welcome to the Home Page!"),
-            ElevatedButton(
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-              },
-              child: Text("Logout"),
-            ),
+            ElevatedButton(onPressed: singout, child: Text("Logout")),
           ],
         ),
       ),
