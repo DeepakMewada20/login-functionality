@@ -2,6 +2,7 @@ import 'package:authentication/wrapper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 // Login Page
 class LoginPage extends StatefulWidget {
@@ -22,6 +23,70 @@ class _LoginPageState extends State<LoginPage> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> signInWithGoogle() async {
+    final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+    try {
+      // 1. Initialize Google Sign-In (must be called once before use)
+      await _googleSignIn.initialize(
+        clientId:
+            '403819429629-c3rnkhtr68f5oe4dsggi037i82c0rgcb.apps.googleusercontent.com', // from Firebase or Google Console
+      );
+
+      // 2. Listen to auth state changes (optional but useful)
+      _googleSignIn.authenticationEvents.listen(
+        (event) {
+          switch (event) {
+            case GoogleSignInAuthenticationEventSignIn():
+              final user = event.user; // GoogleSignInUserData
+              print("Signed in: ${user.displayName}, ${user.email}");
+              break;
+
+            case GoogleSignInAuthenticationEventSignOut():
+              print("User signed out");
+              break;
+          }
+        },
+        onError: (error) {
+          print("Authentication error: $error");
+        },
+      );
+
+      // 3. Try lightweight auth (may show UI on some platforms)
+      await _googleSignIn.attemptLightweightAuthentication();
+
+      // 4. Or explicitly authenticate (shows sign-in UI)
+      final user = await _googleSignIn.authenticate();
+      final GoogleSignInAuthentication googleAuth = user.authentication;
+
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+      );
+      // Sign in to Firebase with the Google credentials
+      await FirebaseAuth.instance.signInWithCredential(credential);
+
+      // Get.offAll(() => Wrapper()); // Navigate to Wrapper
+    } catch (e) {
+      print("Google Sign-In error: $e");
+    }
+  }
+
+  String _getMessageFromErrorCode(String errorCode) {
+    switch (errorCode) {
+      case "account-exists-with-different-credential":
+        return "Account already exists with different credential.";
+      case "invalid-credential":
+        return "Invalid credentials.";
+      case "operation-not-allowed":
+        return "Google sign in is not enabled.";
+      case "user-disabled":
+        return "User has been disabled.";
+      case "user-not-found":
+        return "No user found.";
+      default:
+        return "Sign in failed. Please try again.";
+    }
   }
 
   dynamic login() async {
@@ -206,16 +271,7 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(height: 20),
                     // Google Sign In Button
                     OutlinedButton(
-                      onPressed: () {
-                        // Handle Google sign in
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'Google Sign In functionality not implemented',
-                            ),
-                          ),
-                        );
-                      },
+                      onPressed: signInWithGoogle,
                       style: OutlinedButton.styleFrom(
                         padding: EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(

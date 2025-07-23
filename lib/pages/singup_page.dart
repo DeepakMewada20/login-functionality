@@ -37,6 +37,7 @@ class _SignupPageState extends State<SignupPage> {
             .createUserWithEmailAndPassword(
               email: _emailController.text,
               password: _passwordController.text,
+              
             );
         //print(currentUser.user?.email); // Refresh user data
         if (currentUser.user != null) {
