@@ -8,12 +8,13 @@ import 'package:google_sign_in/google_sign_in.dart';
 class GoogleSingInControler extends GetxController {
   static GoogleSingInControler instence = Get.find();
   RxBool isLoading = false.obs;
+  RxBool isGoogleLoading = false.obs;
   //Rx<User?> _currentUser = Rx<User?>(FirebaseAuth.instance.currentUser);
   GoogleSignIn googleSingIn = GoogleSignIn.instance;
 
   // Method to handle Google Sign-In
   Future<void> googleSignIn() async {
-    //isLoading.value = true;
+    isGoogleLoading.value = true;
     GoogleSignInAccount? user;
     // Initialize Google Sign-In with your client ID (must be called before sign-in)
     unawaited(
@@ -67,7 +68,7 @@ class GoogleSingInControler extends GetxController {
         "An unknown error occurred. Please try again later.${e.toString()}",
       );
     } finally {
-      //isLoading.value = false;
+      isGoogleLoading.value = false;
     }
   }
 

@@ -1,6 +1,7 @@
 import 'package:authentication/pages/email_verification_page.dart';
 import 'package:authentication/pages/home_page.dart';
 import 'package:authentication/pages/login_page.dart';
+import 'package:authentication/pages/phone_login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,7 @@ class _WrapperState extends State<Wrapper> {
                 return EmailVerificationPage();
               } // Navigate to Login Page
             } else {
-              return LoginPage();
+              return PhoneLoginPage();
             }
           } else {
             return Center(

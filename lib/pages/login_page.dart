@@ -1,6 +1,7 @@
 import 'package:authentication/controlers/google_sing_in_controler.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 // Login Page
 class LoginPage extends StatefulWidget {
@@ -126,46 +127,47 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       width: 130,
                       height: 54,
-                      child: Obx(
-                        () => ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              GoogleSingInControler.instence.login(
-                                _emailController.text,
-                                _passwordController.text,
-                              );
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white,
-                            padding: EdgeInsets.symmetric(
-                              vertical: 16,
-                              horizontal: 30,
+                      child:
+                          //Obx(() =>
+                          ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                GoogleSingInControler.instence.login(
+                                  _emailController.text,
+                                  _passwordController.text,
+                                );
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              foregroundColor: Colors.white,
+                              padding: EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 30,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
                             ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                            child: Obx(
+                              () =>
+                                  GoogleSingInControler.instence.isLoading.value
+                                  ? SizedBox(
+                                      height: 25,
+                                      width: 25,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : Text(
+                                      'Login',
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                             ),
                           ),
-                          child:
-                              GoogleSingInControler.instence.isLoading ==
-                                  false.obs
-                              ? Text(
-                                  'Login',
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                )
-                              : SizedBox(
-                                  height: 25,
-                                  width: 25,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                        ),
-                      ),
                     ),
                     SizedBox(height: 30),
                     // OR Divider
@@ -196,32 +198,66 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         side: BorderSide(color: Colors.grey[300]!),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Google Logo (SVG alternative using Container with decoration)
-                          Container(
-                            width: 20,
-                            height: 20,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage(
-                                  'https://developers.google.com/identity/images/g-logo.png',
+                      child: Obx(
+                        () =>
+                            GoogleSingInControler.instence.isGoogleLoading.value
+                            ? Shimmer.fromColors(
+                                baseColor: Colors.grey[300]!,
+                                highlightColor: Colors.white,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 20,
+                                      height: 20,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: NetworkImage(
+                                            'https://developers.google.com/identity/images/g-logo.png',
+                                          ),
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 12),
+                                    Text(
+                                      'Signing in...',
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                fit: BoxFit.contain,
+                              )
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // Google Logo (SVG alternative using Container with decoration)
+                                  Container(
+                                    width: 20,
+                                    height: 20,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: NetworkImage(
+                                          'https://developers.google.com/identity/images/g-logo.png',
+                                        ),
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 12),
+                                  Text(
+                                    'Continue with Google',
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ),
-                          SizedBox(width: 12),
-                          Text(
-                            'Continue with Google',
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black87,
-                            ),
-                          ),
-                        ],
                       ),
                     ),
                     SizedBox(height: 30),
