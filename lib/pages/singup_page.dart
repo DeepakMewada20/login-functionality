@@ -37,7 +37,6 @@ class _SignupPageState extends State<SignupPage> {
             .createUserWithEmailAndPassword(
               email: _emailController.text,
               password: _passwordController.text,
-              
             );
         //print(currentUser.user?.email); // Refresh user data
         if (currentUser.user != null) {
@@ -67,7 +66,8 @@ class _SignupPageState extends State<SignupPage> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () =>
+              Get.offAll(() => LoginPage()), // Navigate to Login Page
         ),
       ),
       body: SafeArea(

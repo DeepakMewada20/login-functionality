@@ -1,3 +1,4 @@
+import 'package:authentication/controlers/google_sing_in_controler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +21,7 @@ class HomePage extends StatelessWidget {
               style: TextStyle(fontSize: 20),
             ),
             Text("Welcome to the Home Page!"),
-            ElevatedButton(onPressed: singout, child: Text("Logout")),
+            ElevatedButton(onPressed: GoogleSingInControler.instence.googleSingOut, child: Text("Logout")),
           ],
         ),
       ),
