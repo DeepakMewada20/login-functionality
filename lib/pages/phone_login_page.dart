@@ -1,5 +1,7 @@
+import 'package:authentication/controlers/Phone_number_login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 class PhoneLoginPage extends StatefulWidget {
   const PhoneLoginPage({super.key});
   @override
@@ -8,9 +10,9 @@ class PhoneLoginPage extends StatefulWidget {
 
 class _PhoneLoginPageState extends State<PhoneLoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _phoneController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
   String _selectedCountryCode = '+91';
-  
+
   final List<Map<String, String>> _countryCodes = [
     {'code': '+1', 'country': 'US', 'flag': '🇺🇸'},
     {'code': '+44', 'country': 'UK', 'flag': '🇬🇧'},
@@ -43,11 +45,7 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
                   color: Colors.blue.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  Icons.phone_android,
-                  size: 50,
-                  color: Colors.blue,
-                ),
+                child: Icon(Icons.phone_android, size: 50, color: Colors.blue),
               ),
               SizedBox(height: 30),
               // Title
@@ -98,7 +96,10 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
                           InkWell(
                             onTap: _showCountryPicker,
                             child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 16,
+                              ),
                               decoration: BoxDecoration(
                                 border: Border(
                                   right: BorderSide(color: Colors.grey[300]!),
@@ -109,7 +110,9 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
                                 children: [
                                   Text(
                                     _countryCodes.firstWhere(
-                                      (country) => country['code'] == _selectedCountryCode,
+                                      (country) =>
+                                          country['code'] ==
+                                          _selectedCountryCode,
                                     )['flag']!,
                                     style: TextStyle(fontSize: 20),
                                   ),
@@ -133,7 +136,7 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
                           // Phone Number Field
                           Expanded(
                             child: TextFormField(
-                              controller: _phoneController,
+                              controller: _phoneNumberController,
                               keyboardType: TextInputType.phone,
                               inputFormatters: [
                                 FilteringTextInputFormatter.digitsOnly,
@@ -142,7 +145,10 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
                               decoration: InputDecoration(
                                 hintText: 'Enter phone number',
                                 border: InputBorder.none,
-                                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 16,
+                                ),
                               ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -164,11 +170,11 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           // Navigate to OTP page
-                          Navigator.pushNamed(
-                            context, 
-                            '/phone-otp',
-                            arguments: _selectedCountryCode + _phoneController.text,
-                          );
+                          PhoneNumberLoginController.instance
+                              .loginWithPhoneNumber(
+                                phoneNumber: _phoneNumberController.text,
+                                countryCode: _selectedCountryCode,
+                              );
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -216,16 +222,14 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (BuildContext context) {
-        return Container(
+        return SizedBox(
           height: 400,
           child: Column(
             children: [
               Container(
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.grey[200]!),
-                  ),
+                  border: Border(bottom: BorderSide(color: Colors.grey[200]!)),
                 ),
                 child: Row(
                   children: [

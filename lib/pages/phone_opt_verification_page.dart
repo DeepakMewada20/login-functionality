@@ -1,4 +1,6 @@
+import 'package:authentication/controlers/Phone_number_login_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 
 // Phone OTP Verification Page
@@ -16,12 +18,13 @@ class _PhoneOTPPageState extends State<PhoneOTPPage>
   late AnimationController _animationController;
   late Animation<double> _animation;
 
-  int _resendTimer = 30;
-  bool _canResend = false;
+  // int _resendTimer = 30;
+  // bool _canResend = false;
 
   @override
   void initState() {
     super.initState();
+    Get.put(PhoneNumberLoginController());
     _animationController = AnimationController(
       duration: Duration(milliseconds: 300),
       vsync: this,
@@ -31,23 +34,9 @@ class _PhoneOTPPageState extends State<PhoneOTPPage>
       end: 1.0,
     ).animate(_animationController);
     _animationController.forward();
-    _startResendTimer();
+    PhoneNumberLoginController.instance.startResendTimer();
   }
 
-  void _startResendTimer() {
-    Future.delayed(Duration(seconds: 1), () {
-      if (_resendTimer > 0 && mounted) {
-        setState(() {
-          _resendTimer--;
-        });
-        _startResendTimer();
-      } else if (mounted) {
-        setState(() {
-          _canResend = true;
-        });
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -221,7 +210,8 @@ class _PhoneOTPPageState extends State<PhoneOTPPage>
                       "Didn't receive the code? ",
                       style: TextStyle(color: Colors.grey[600]),
                     ),
-                    if (_canResend)
+                    Obx(()=>PhoneNumberLoginController.instance.canResend.value?
+                    
                       TextButton(
                         onPressed: _resendOTP,
                         child: Text(
@@ -232,14 +222,15 @@ class _PhoneOTPPageState extends State<PhoneOTPPage>
                           ),
                         ),
                       )
-                    else
+                    :
                       Text(
-                        'Resend in ${_resendTimer}s',
+                        'Resend in ${PhoneNumberLoginController.instance.resendTimer.value}s',
                         style: TextStyle(
                           color: Colors.grey[500],
                           fontWeight: FontWeight.w500,
                         ),
                       ),
+                    ),
                   ],
                 ),
                 SizedBox(height: 20),
@@ -287,11 +278,7 @@ class _PhoneOTPPageState extends State<PhoneOTPPage>
   }
 
   void _resendOTP() {
-    setState(() {
-      _resendTimer = 30;
-      _canResend = false;
-    });
-    _startResendTimer();
+    PhoneNumberLoginController.instance.startResendTimer();
 
     // Clear OTP field
     _pinController.clear();
