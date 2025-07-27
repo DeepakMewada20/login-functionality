@@ -9,20 +9,29 @@ class PhoneNumberLoginController extends GetxController {
   String _verificationId = "";
   int? _resendToken;
   RxBool canResend = false.obs;
-  RxInt resendTimer = 40.obs;
-
+  RxInt resendTimer = 60.obs;
 
   // Method to handle phone number login
-  Future<void> loginWithPhoneNumber({required String phoneNumber,required String countryCode}) async {
+  Future<void> loginWithPhoneNumber({required String phoneNumber}) async {
     isLoading.value = true;
     try {
       await FirebaseAuth.instance.verifyPhoneNumber(
-        
         phoneNumber: phoneNumber,
-        timeout: const Duration(seconds: 20),
+        timeout: const Duration(seconds: 30),
         forceResendingToken: canResend.value ? _resendToken : null,
         verificationCompleted: (PhoneAuthCredential credential) async {
-          print('not autometicaly detect OTP');
+          try {
+            // Automatically sign in the user
+            await FirebaseAuth.instance.signInWithCredential(credential).then((
+              value,
+            ) {
+              Get.snackbar('Success', 'Logged in successfully');
+              // Navigate to home or main screen
+              Get.offAll(() => Wrapper());
+            });
+          } catch (e) {
+            Get.snackbar('Error', 'Failed to auto-login: $e');
+          }
         },
         verificationFailed: (FirebaseAuthException e) {
           Get.snackbar('verification Failed', e.toString());
@@ -30,19 +39,13 @@ class PhoneNumberLoginController extends GetxController {
         codeSent: (String verificationId, int? resendToken) {
           _verificationId = verificationId;
           _resendToken = resendToken;
-          Get.to(PhoneOTPPage(),arguments: countryCode+phoneNumber);
+          Get.to(() => PhoneOTPPage(), arguments: phoneNumber);
           Get.snackbar(
-            'Code Sent',
+            'Code Sent!!!!!!!!!!!',
             'A verification code has been sent to $phoneNumber',
           );
+          isLoading.value = false;
           // Navigate to OTP verification screen
-          Get.toNamed(
-            '/otp-verification',
-            arguments: {
-              'verificationId': verificationId,
-              'phoneNumber': phoneNumber,
-            },
-          );
         },
         codeAutoRetrievalTimeout: (String verificationId) {
           _verificationId = verificationId;
@@ -52,9 +55,10 @@ class PhoneNumberLoginController extends GetxController {
       );
     } catch (e) {
       Get.snackbar('Error', 'Failed to login with phone number: $e');
-    } finally {
-      isLoading.value = false;
     }
+    // finally {
+    //   isLoading.value = false;
+    // }
   }
 
   Future<void> singInWithOTP(String otp) async {

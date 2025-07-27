@@ -1,4 +1,3 @@
-import 'package:authentication/pages/email_verification_page.dart';
 import 'package:authentication/pages/home_page.dart';
 import 'package:authentication/pages/phone_login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,14 +17,16 @@ class _WrapperState extends State<Wrapper> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.active) {
-            User? user = snapshot.data;
+            //User? user = snapshot.data;
             if (snapshot.hasData) {
-              if (user!.emailVerified) {
-                return HomePage(); // Navigate to Home Page if email is verified
-              } else {
-                // Navigate to Email Verification Page if email is not verified
-                return EmailVerificationPage();
-              } // Navigate to Login Page
+              // if (user!.emailVerified) {
+              // return HomePage(); // Navigate to Home Page if email is verified
+              // }
+              // else {
+              // Navigate to Email Verification Page if email is not verified
+              // return EmailVerificationPage();
+              return HomePage(); // Navigate to Home Page if user is logged in
+              // } // Navigate to Login Page
             } else {
               return PhoneLoginPage();
             }

@@ -1,6 +1,7 @@
 import 'package:authentication/controlers/Phone_number_login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 
 class PhoneLoginPage extends StatefulWidget {
   const PhoneLoginPage({super.key});
@@ -166,31 +167,51 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
                     ),
                     SizedBox(height: 40),
                     // Send OTP Button
-                    ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          // Navigate to OTP page
-                          PhoneNumberLoginController.instance
-                              .loginWithPhoneNumber(
-                                phoneNumber: _phoneNumberController.text,
-                                countryCode: _selectedCountryCode,
-                              );
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        foregroundColor: Colors.white,
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            // Navigate to OTP page
+                            PhoneNumberLoginController.instance
+                                .loginWithPhoneNumber(
+                                  phoneNumber:
+                                      _selectedCountryCode +
+                                      _phoneNumberController.text,
+                                );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.symmetric(
+                            vertical: 16,
+                            horizontal: 20,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 2,
                         ),
-                        elevation: 2,
-                      ),
-                      child: Text(
-                        'Send OTP',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                        child: Obx(
+                          () =>
+                              PhoneNumberLoginController
+                                  .instance
+                                  .isLoading
+                                  .value
+                              ? Text(
+                                  'OTP Sending...',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              : Text(
+                                  'Send OTP',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                         ),
                       ),
                     ),

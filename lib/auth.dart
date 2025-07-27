@@ -1,3 +1,4 @@
+import 'package:authentication/controlers/Phone_number_login_controller.dart';
 import 'package:authentication/controlers/google_sing_in_controler.dart';
 import 'package:authentication/pages/forgot_password_page.dart';
 import 'package:authentication/pages/home_page.dart';
@@ -13,6 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   Get.put(GoogleSingInControler()); // Initialize the Google Sign-In controller
+  Get.put(PhoneNumberLoginController());
   runApp(MyApp());
 }
 
