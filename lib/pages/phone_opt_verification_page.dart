@@ -5,9 +5,10 @@ import 'package:pinput/pinput.dart';
 
 // Phone OTP Verification Page
 class PhoneOTPPage extends StatefulWidget {
-  const PhoneOTPPage({super.key});
+  PhoneOTPPage({super.key});
   @override
   _PhoneOTPPageState createState() => _PhoneOTPPageState();
+  final phoneNumber = Get.arguments as String;
 }
 
 class _PhoneOTPPageState extends State<PhoneOTPPage>
@@ -34,13 +35,13 @@ class _PhoneOTPPageState extends State<PhoneOTPPage>
       end: 1.0,
     ).animate(_animationController);
     _animationController.forward();
-    PhoneNumberLoginController.instance.startResendTimer();
+    //PhoneNumberLoginController.instance.startResendTimer();
   }
 
   @override
   Widget build(BuildContext context) {
-    final String phoneNumber =
-        ModalRoute.of(context)?.settings.arguments as String? ?? '';
+    // final String phoneNumber =
+    //     ModalRoute.of(context)?.settings.arguments as String? ?? '';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -98,7 +99,7 @@ class _PhoneOTPPageState extends State<PhoneOTPPage>
                     children: [
                       TextSpan(text: 'Code sent to '),
                       TextSpan(
-                        text: phoneNumber,
+                        text: widget.phoneNumber,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black87,
@@ -172,12 +173,10 @@ class _PhoneOTPPageState extends State<PhoneOTPPage>
                   pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
                   showCursor: true,
                   cursor: Container(width: 2, height: 24, color: Colors.blue),
-                  onCompleted: (pin) {
-                    print(
-                      "#############################################$pin",
-                    );
-                    _verifyOTP(pin);
-                  },
+                  // onCompleted: (pin) {
+                  //   print("#############################################$pin");
+                  //   _verifyOTP(pin);
+                  // },
                   onChanged: (value) {
                     // Clear any previous error state
                     if (_pinController.text.length < 6) {
@@ -277,17 +276,14 @@ class _PhoneOTPPageState extends State<PhoneOTPPage>
   }
 
   void _resendOTP() {
-    PhoneNumberLoginController.instance.startResendTimer();
+    // PhoneNumberLoginController.instance.startResendTimer();
     // Clear OTP field
+    PhoneNumberLoginController.instance.loginWithPhoneNumber(
+      phoneNumber: widget.phoneNumber,
+      isResend: true,
+    );
     _pinController.clear();
     _pinFocusNode.requestFocus();
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('OTP sent successfully!'),
-        backgroundColor: Colors.blue,
-      ),
-    );
   }
 
   @override

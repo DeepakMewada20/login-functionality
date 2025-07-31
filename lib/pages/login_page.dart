@@ -1,4 +1,5 @@
 import 'package:authentication/controlers/google_sing_in_controler.dart';
+import 'package:authentication/pages/phone_login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
@@ -258,6 +259,37 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ],
                               ),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    // Phone Login Button
+                    OutlinedButton(
+                      onPressed: () => Get.to(() => PhoneLoginPage()),
+                      style: OutlinedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        side: BorderSide(color: Colors.grey[300]!),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.phone_android,
+                            size: 20,
+                            color: Colors.black87,
+                          ),
+                          SizedBox(width: 12),
+                          Text(
+                            'Continue with Phone',
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(height: 30),

@@ -2,6 +2,7 @@ import 'package:authentication/pages/phone_opt_verification_page.dart';
 import 'package:authentication/wrapper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PhoneNumberLoginController extends GetxController {
   static PhoneNumberLoginController instance = Get.find();
@@ -12,13 +13,16 @@ class PhoneNumberLoginController extends GetxController {
   RxInt resendTimer = 60.obs;
 
   // Method to handle phone number login
-  Future<void> loginWithPhoneNumber({required String phoneNumber}) async {
+  Future<void> loginWithPhoneNumber({
+    required String phoneNumber,
+    bool isResend = false,
+  }) async {
     isLoading.value = true;
     try {
       await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: phoneNumber,
         timeout: const Duration(seconds: 30),
-        forceResendingToken: canResend.value ? _resendToken : null,
+        forceResendingToken: isResend ? _resendToken : null,
         verificationCompleted: (PhoneAuthCredential credential) async {
           try {
             // Automatically sign in the user
@@ -40,6 +44,7 @@ class PhoneNumberLoginController extends GetxController {
           _verificationId = verificationId;
           _resendToken = resendToken;
           Get.to(() => PhoneOTPPage(), arguments: phoneNumber);
+          startResendTimer();
           Get.snackbar(
             'Code Sent!!!!!!!!!!!',
             'A verification code has been sent to $phoneNumber',
@@ -50,7 +55,7 @@ class PhoneNumberLoginController extends GetxController {
         codeAutoRetrievalTimeout: (String verificationId) {
           _verificationId = verificationId;
           // Optionally handle timeout
-          Get.snackbar('Timeout', 'Verification code retrieval timed out');
+          //Get.snackbar('Timeout', 'Verification code retrieval timed out');
         },
       );
     } catch (e) {
@@ -70,9 +75,11 @@ class PhoneNumberLoginController extends GetxController {
       );
       await FirebaseAuth.instance.signInWithCredential(credential).then((
         value,
-      ) {
+      ) async {
         Get.snackbar('Success', 'Logged in successfully');
         // Navigate to home or main screen
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isPhoneAuth', true);
         Get.offAll(() => Wrapper());
       });
     } catch (e) {
