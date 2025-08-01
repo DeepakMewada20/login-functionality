@@ -1,7 +1,8 @@
-import 'package:authentication/controlers/Phone_number_login_controller.dart';
+import 'package:authentication/controlers/phone_number_login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PhoneLoginPage extends StatefulWidget {
   const PhoneLoginPage({super.key});
@@ -28,6 +29,12 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
   ];
 
   @override
+  void initState() {
+    PhoneNumberLoginController.instance.isLoading.value = false;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -43,7 +50,7 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
                 width: 100,
                 height: 100,
                 decoration: BoxDecoration(
-                  color: Colors.blue.withOpacity(0.1),
+                  color: Colors.blue.withAlpha((0.1 * 255).toInt()),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(Icons.phone_android, size: 50, color: Colors.blue),
@@ -198,11 +205,21 @@ class _PhoneLoginPageState extends State<PhoneLoginPage> {
                                   .instance
                                   .isLoading
                                   .value
-                              ? Text(
-                                  'OTP Sending...',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                              ? Shimmer(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.grey[100]!,
+                                      Colors.grey[400]!,
+                                      Colors.grey[100]!,
+                                    ],
+                                    stops: [0.1, 0.5, 0.9],
+                                  ),
+                                  child: Text(
+                                    'Sending OTP...',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 )
                               : Text(

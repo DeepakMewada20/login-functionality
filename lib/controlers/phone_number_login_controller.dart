@@ -2,7 +2,6 @@ import 'package:authentication/pages/phone_opt_verification_page.dart';
 import 'package:authentication/wrapper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PhoneNumberLoginController extends GetxController {
   static PhoneNumberLoginController instance = Get.find();
@@ -29,11 +28,13 @@ class PhoneNumberLoginController extends GetxController {
             await FirebaseAuth.instance.signInWithCredential(credential).then((
               value,
             ) {
+              isLoading.value = false;
               Get.snackbar('Success', 'Logged in successfully');
               // Navigate to home or main screen
               Get.offAll(() => Wrapper());
             });
           } catch (e) {
+            isLoading.value = false;
             Get.snackbar('Error', 'Failed to auto-login: $e');
           }
         },
@@ -60,6 +61,7 @@ class PhoneNumberLoginController extends GetxController {
       );
     } catch (e) {
       Get.snackbar('Error', 'Failed to login with phone number: $e');
+      isLoading.value = false;
     }
     // finally {
     //   isLoading.value = false;
@@ -78,8 +80,6 @@ class PhoneNumberLoginController extends GetxController {
       ) async {
         Get.snackbar('Success', 'Logged in successfully');
         // Navigate to home or main screen
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setBool('isPhoneAuth', true);
         Get.offAll(() => Wrapper());
       });
     } catch (e) {

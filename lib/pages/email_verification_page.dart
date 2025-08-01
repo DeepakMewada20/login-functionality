@@ -34,10 +34,10 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
             );
           })
           .catchError((error) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text("Error sending verification email: $error"),
-              ),
+            Get.snackbar(
+              "Error",
+              "Failed to send verification email: $error",
+              snackPosition: SnackPosition.BOTTOM,
             );
           });
     }
@@ -48,8 +48,10 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
         ?.reload()
         .then((value) => Get.offAll(() => Wrapper()))
         .catchError((error) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Error reloading user: $error")),
+          Get.snackbar(
+            "Error",
+            "Failed to reload user: $error",
+            snackPosition: SnackPosition.BOTTOM,
           );
         });
   }

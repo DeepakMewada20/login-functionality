@@ -1,7 +1,8 @@
-import 'package:authentication/controlers/Phone_number_login_controller.dart';
+import 'package:authentication/controlers/phone_number_login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
+import 'package:shimmer/shimmer.dart';
 
 // Phone OTP Verification Page
 class PhoneOTPPage extends StatefulWidget {
@@ -67,7 +68,7 @@ class _PhoneOTPPageState extends State<PhoneOTPPage>
                   width: 100,
                   height: 100,
                   decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.1),
+                    color: Colors.green.withAlpha(26),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -197,9 +198,27 @@ class _PhoneOTPPageState extends State<PhoneOTPPage>
                     ),
                     elevation: 2,
                   ),
-                  child: Text(
-                    'Verify & Continue',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+
+                  child: Obx(
+                    () => PhoneNumberLoginController.instance.isLoading.value
+                        ? Shimmer.fromColors(
+                            baseColor: Colors.white,
+                            highlightColor: Colors.grey[400]!,
+                            child: Text(
+                              'Verify & Continue',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )
+                        : Text(
+                            'Verify & Continue',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
                 ),
                 SizedBox(height: 30),

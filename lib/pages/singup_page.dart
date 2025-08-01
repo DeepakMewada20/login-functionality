@@ -40,19 +40,19 @@ class _SignupPageState extends State<SignupPage> {
             );
         //print(currentUser.user?.email); // Refresh user data
         if (currentUser.user != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                '${currentUser.user!.displayName}Sign up successful!',
-              ),
-            ),
+          Get.snackbar(
+            "Sign Up Successful",
+            "Welcome ${_nameController.text}!",
+            snackPosition: SnackPosition.BOTTOM,
           );
           Get.offAll(() => Wrapper()); // Navigate to Wrapper
         }
       } catch (e) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Sign up failed: $e')));
+        Get.snackbar(
+          "Sign Up Failed",
+          e.toString(),
+          snackPosition: SnackPosition.BOTTOM,
+        );
       }
     }
   }
