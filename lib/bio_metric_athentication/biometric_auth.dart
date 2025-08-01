@@ -187,10 +187,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.1),
+                          color: Colors.white.withAlpha((0.1 * 255).toInt()),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withAlpha((0.2 * 255).toInt()),
                             width: 1,
                           ),
                         ),
@@ -214,7 +214,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         'Please authenticate to continue',
                         style: GoogleFonts.poppins(
                           fontSize: 16,
-                          color: Colors.white.withOpacity(0.8),
+                          color: Colors.white.withAlpha((0.8 * 255).toInt()),
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -226,12 +226,12 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           borderRadius: BorderRadius.circular(16),
                           gradient: LinearGradient(
                             colors: [
-                              Colors.white.withOpacity(0.2),
-                              Colors.white.withOpacity(0.1),
+                              Colors.white.withAlpha((0.2 * 255).toInt()),
+                              Colors.white.withAlpha((0.1 * 255).toInt()),
                             ],
                           ),
                           border: Border.all(
-                            color: Colors.white.withOpacity(0.3),
+                            color: Colors.white.withAlpha((0.3 * 255).toInt()),
                             width: 1,
                           ),
                         ),
@@ -439,7 +439,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.blue.shade200.withOpacity(0.5),
+                          color: Colors.blue.shade200.withAlpha((0.5 * 255).toInt()),
                           blurRadius: 20,
                           offset: const Offset(0, 10),
                         ),
@@ -462,7 +462,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
+                                color: Colors.white.withAlpha((0.2 * 255).toInt()),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: const Icon(
@@ -492,7 +492,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                     'Completion Rate',
                                     style: GoogleFonts.poppins(
                                       fontSize: 14,
-                                      color: Colors.white.withOpacity(0.8),
+                                      color: Colors.white.withAlpha((0.8 * 255).toInt()),
                                     ),
                                   ),
                                 ],
@@ -502,7 +502,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               width: 60,
                               height: 60,
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
+                                color: Colors.white.withAlpha((0.2 * 255).toInt()),
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               child: const Icon(

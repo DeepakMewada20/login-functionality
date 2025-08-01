@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 // Forgot Password Page
 class ForgotPasswordPage extends StatefulWidget {
@@ -26,8 +27,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           email: _emailController.text,
         );
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error, send to reset password link, $e")),
+        Get.snackbar(
+          "Error!, send to reset password link",
+          e.toString(),
+          snackPosition: SnackPosition.BOTTOM,
         );
       }
     }

@@ -40,7 +40,7 @@ class _WrapperState extends State<Wrapper> {
           }
           else {
             return Center(
-              child: CircularProgressIndicator(),
+              // child: CircularProgressIndicator(),
             ); // Show loading indicator
           }
         },
